@@ -1,0 +1,248 @@
+---
+title: "Exploring the BRFSS data"
+output: 
+  html_document:
+    fig_height: 4
+    highlight: pygments
+    theme: spacelab
+---
+
+## Setup
+
+### Load packages
+
+```{r load-packages, message = FALSE}
+library(ggplot2)
+library(dplyr)
+library(maps)
+```
+
+### Load data
+```{r load-data}
+load("brfss2013.RData")
+# brfss2013
+# names(brfss2013)
+```
+
+* * *
+
+
+## Part 1: Data
+
+The Behavioral Risk Factor Surveillance System Codebook describes the BRFSS as: “The Behavioral Risk Factor Surveillance System (BRFSS) is a collaborative project between all of the states in the United States (US) and participating US territories and the Centers for Disease Control and Prevention (CDC)… BRFSS conducts both landline telephone- and cellular telephone-based surveys. In conducting the BRFSS landline telephone survey, interviewers collect data from a randomly selected adult in a household. In conducting the cellular telephone version of the BRFSS questionnaire, interviewers collect data from an adult who participates by using a cellular telephone and resides in a private residence or college housing.”
+
+The survey impliments random sampling when contacting US Adults, so results could be generaliable to US adults 18 years or older. Bias may exist as a result of the survey design, given that only US adults, aged 18 or older were surveyed. Further, if an indvidual does not have a land or cellular phone number, he or she would not be included in the survey. The results are generalizable but not causal in nature, because the study design does not control for explanitory variables.
+
+* * *
+
+## Question address details from web
+<pre>
+(addepev2)
+Q. Ever Told You Had A Depressive Disorder
+
+Has a doctor, nurse, or other health professional ever told you that you had any of the following? 
+For each, tell me     
+            “Yes”, “No”, or you're “Not sure”:
+
+(Ever told) You that you have a depressive disorder, including depression, major depression, dysthymia, or minor depression?
+
+Value	    Value Label	        Frequency	    Percent     Cumulative Frequency
+1	        Yes	                95,776	      19.48	      19.48
+2	        No	                393,709	      80.06	      99.53
+NA	      Don’t know/Not sure	1,732	        0.35	      99.89
+NA        Refused	            556	          0.11	      100.00
+          Total               491,773
+
+For general Depression, you must have 5 or more of the following symptoms, and experience them at least once a day for a period of more than 2 weeks:
+
+You feel sad or irritable most of the day, nearly every day.
+You are less interested in most activities you once enjoyed.
+You suddenly lose or gain weight or have a change in appetite.
+You have trouble falling asleep or want to sleep more than usual.
+You experience feelings of restlessness.
+You feel unusually tired and have a lack of energy.
+You feel worthless or guilty, often about things that wouldn’t normally make you feel that way.
+You have difficulty concentrating, thinking, or making decisions.
+You think about harming yourself or committing suicide.
+
+Source/credits : https://www.healthline.com/health/clinical-depression#symptoms
+
+Also used reference project for completing my own :https://rstudio-pubs-static.s3.amazonaws.com/196219_884380d53c2844e3847d084ad13f3b08.html
+</pre>
+```{r data-selection}
+# names(addepev2)
+# dim(addepev2)
+# addepev2$dispcode=="Completed interview"
+
+# data variables considered for the entire research
+
+# brfss2013 %>%
+#   select(dispcode,addepev2,sleptim1,genhlth,physhlth,menthlth,marital,medcost,educa,employ1,income2,smoke100,exerany2,exract11,X_race,X_bmi5cat)
+```
+Uncomment the above to see the dataframe
+```{r data-selection1}
+
+# We are taking consideration of selective traits for Depression Disorder possibilities
+```
+
+
+* * *
+
+## Part 2: Research questions
+
+**Research question 1:**
+
+Is there a higher prevalence of depression disorder in individuals with High school Graduates compared to College Graduates? Also consider income for the same.
+
+**Research question 2:**
+Is there a higher prevalence of depression disorder in individuals with poor and fair general health compared to those with great and very good general health?
+
+
+**Research question 3:**
+
+Can a geographic pattern be identified between general health and prevalence of depression Disorder?
+
+* * *
+
+## Part 3: Exploratory data analysis
+
+**Research question 1:**
+
+We are taking depression report data (addepev2) and educational background, income status data and analyzing them.
+
+```{r research-1.1}
+
+# Create Data frame calculating individual counts of Educational status base it on his/her Depression Disorder records
+brfss_depression_educa <- brfss2013 %>%
+     filter(!is.na(addepev2),!is.na(educa)) %>%
+     group_by(educa,addepev2) %>%
+     summarise(n = n()) %>%
+     mutate(pct_total_stacked = n/sum(n), 
+position_stacked = cumsum(pct_total_stacked)-0.5*pct_total_stacked,
+position_n = cumsum(n)-0.5*n)
+
+
+# using 100-stack format
+# better for plotting than the normal bar plot due to mixing up of texts areas 
+ggplot(brfss_depression_educa, aes(x=educa, y=pct_total_stacked, fill=addepev2)) +
+    geom_bar(stat='identity',  width = .7, color="black")+
+    geom_text(aes(label=ifelse(addepev2 == 'Yes', paste0(sprintf("%.0f", pct_total_stacked*100),"%"),""), y=position_stacked), color="white") +
+    coord_flip() +
+    scale_y_continuous() +
+    labs(y="", x="")
+
+```
+The majority of users are not victims of Depression Disorder. Analysis shows as follows:
+
+1.    More than a quater of High school students are more under depression during their Grade 9 through 11
+2.    Borderline Depression exists in others qualified or non-qualified people about 20% average rate
+
+
+```{r research-1.2}
+
+# Create Data frame calculating individual counts of Income status base it on his/her Depression Disorder records
+brfss_depression_income <- brfss2013 %>%
+     filter(!is.na(addepev2),!is.na(income2)) %>%
+     group_by(income2,addepev2) %>%
+     summarise(n = n()) %>%
+     mutate(pct_total_stacked = n/sum(n), 
+position_stacked = cumsum(pct_total_stacked)-0.5*pct_total_stacked,
+position_n = cumsum(n)-0.5*n)
+
+
+# using 100-stack format
+# better for plotting than the normal bar plot due to mixing up of texts areas 
+
+ggplot(brfss_depression_income, aes(x=income2, y=pct_total_stacked, fill=addepev2)) +
+    geom_bar(stat='identity',  width = .7, color="black")+
+    geom_text(aes(label=ifelse(addepev2 == 'Yes', paste0(sprintf("%.0f", pct_total_stacked*100),"%"),""), y=position_stacked), color="white") +
+    coord_flip() +
+    scale_y_continuous() +
+    labs(y="", x="")
+
+```
+Few analysis discoveries are as follows:
+
+1.    Income plays an important role in Depression disorder but, it does not dissolve it due to confounding variables like Medical costs, Marital        status or other economic and personal factor.
+2.    More than three times people with income less than 10,000 USD are having Depression Disorders than people with income of 75000 USD.
+
+Overall inference is as follows :
+
+People with income of less than or equal to 10000 USD and High school dropouts have higher prevalence of Depression Disorder.
+There seems to be a relationship between Income and Educational Qualification and Depression disorder.
+
+
+
+**Research question 2:**
+
+
+We are taking depression report data (addepev2) and general health, poor health data and analysing them.
+
+```{r research-2.1}
+# Create Data frame calculating individual General health status and base it on his/her Depression Disorder records
+
+brfss_depression <- brfss2013 %>%
+     filter(!is.na(addepev2),!is.na(genhlth)) %>%
+     group_by(genhlth,addepev2) %>%
+     summarise(n = n()) %>%
+     mutate(pct_total_stacked = n/sum(n), 
+position_stacked = cumsum(pct_total_stacked)-0.5*pct_total_stacked,
+position_n = cumsum(n)-0.5*n)
+```
+Shaping data for further analysis using Bar Plot
+
+```{r research-2.2}
+ggplot(brfss_depression, aes(genhlth), y=n) +
+    geom_bar(aes(fill = addepev2, weight = n),  width = .7, color="black") +
+    geom_text(aes(label=n, y=position_n), color="white")
+
+```
+Analyzing stacked bar seems to show relationship between general health status and prevalence of depression, but it is more difficult to notice proportional difference.
+
+```{r research-2.3}
+#100% Stacked
+ggplot(brfss_depression, aes(x=genhlth, y=pct_total_stacked, fill=addepev2)) +
+    geom_bar(stat='identity',  width = .7, color="black")+
+    geom_text(aes(label=ifelse(addepev2 == 'Yes', paste0(sprintf("%.0f", pct_total_stacked*100),"%"),""), y=position_stacked), color="white") +
+    coord_flip() +
+    scale_y_continuous() +
+    labs(y="", x="")
+
+
+# using 100-stack format
+# better for plotting than the normal bar plot due to mixing up of texts areas 
+```
+Overall Analysis yield these conclusions :
+
+Using 100% stacked bars shows that those with poor health has around three times the prevalence of depression than those with excellent general health.
+We find that it is 47% more for poor to face depression disorder,and just 9% for excellent health. ( more that 3 times ) 
+There seems to be a relationship between general health and Depression disorder.
+
+
+**Research question 3:**
+
+We are taking depression report data (addepev2) and general health for each state and analysing them.
+
+```{r research-3.1}
+# Create Data frame calculating individual General health status and base it on his/her Depression Disorder records
+# Used Count plot to the above and aslo Violin plot for distribution idea ( ignore if not understood -its optional and complicated)
+brfss_depression_state <- brfss2013 %>%
+    filter(!is.na(addepev2),!is.na(genhlth)) %>%
+               select(genhlth, X_state, addepev2) 
+
+ggplot(brfss_depression_state,aes(genhlth,y=addepev2))+geom_count()+geom_violin()
+           
+```
+
+By plotting a count plot based on the general health and Depression Disorder report, we understand the prevalence of Depression Disorder in the Good Health more than others. Mostly counts are in Good health and least in case of Very Good Health report.Even tho, it is not the overall factor for considering Depression, but we would consider it as best factor and plot the same for other states.
+
+```{r research-3.2}
+# Summing every state depression count data
+ggplot(brfss_depression_state, aes(x=addepev2,y=genhlth)) +geom_count()+facet_wrap(~X_state,nrow = 4)
+
+```
+By plotting for each state, we understand more meaningful insights as follows:
+
+1.    There is a clear relationship between geographical locations and cases of Depression Disorders. 
+2.    Few states have equal counts of Depressed and non-depressed people
+3.    There could be many confounding variables in out case, but overall there is relation.
