@@ -1,11 +1,11 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-public class QuickUnion {
+public class QuickUnionweighted {
     private int[] id;
 
     //initialize
-    public QuickUnion(int n) {
+    public QuickUnionweighted(int n) {
         id = new int[n];
 
         for (int i = 0; i < n; i++) {
@@ -47,7 +47,7 @@ public class QuickUnion {
 
     public static void main(String[] arg) {
         int n = StdIn.readInt();
-        QuickUnion obj1 = new QuickUnion(n);
+        QuickUnionweighted obj1 = new QuickUnionweighted(n);
         int k = n;
         while (k != 0) {
             k--;

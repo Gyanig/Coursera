@@ -44,7 +44,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pathVariables" />
   </component>
-  <component name="RunManager" selected="Application.Quickfire">
+  <component name="RunManager" selected="Application.QuickUnionPathCompression">
     <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
@@ -52,6 +52,18 @@
     <configuration name="HelloWorld" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="HelloWorld" />
       <module name="demo" />
+      <method v="2" />
+    </configuration>
+    <configuration name="QuickUnion" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="QuickUnion" />
+      <module name="demo" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="QuickUnionPathCompression" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="QuickUnionPathCompression" />
+      <module name="demo" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <configuration name="Quickfire" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -78,7 +90,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.QuickUnionPathCompression" />
         <item itemvalue="Application.Quickfire" />
+        <item itemvalue="Application.QuickUnion" />
         <item itemvalue="Application.Scratch" />
       </list>
     </recent_temporary>
@@ -100,22 +114,22 @@
       <screen x="0" y="0" width="1536" height="832" />
     </state>
     <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.832@0.0.1536.832" timestamp="1596554498176" />
-    <state width="1537" height="230" key="GridCell.Tab.0.bottom" timestamp="1596555454733">
+    <state width="1537" height="255" key="GridCell.Tab.0.bottom" timestamp="1596744222752">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
-    <state width="1537" height="230" key="GridCell.Tab.0.bottom/0.0.1536.832@0.0.1536.832" timestamp="1596555454733" />
-    <state width="1537" height="230" key="GridCell.Tab.0.center" timestamp="1596555454732">
+    <state width="1537" height="255" key="GridCell.Tab.0.bottom/0.0.1536.832@0.0.1536.832" timestamp="1596744222752" />
+    <state width="1537" height="255" key="GridCell.Tab.0.center" timestamp="1596744222752">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
-    <state width="1537" height="230" key="GridCell.Tab.0.center/0.0.1536.832@0.0.1536.832" timestamp="1596555454732" />
-    <state width="1537" height="230" key="GridCell.Tab.0.left" timestamp="1596555454732">
+    <state width="1537" height="255" key="GridCell.Tab.0.center/0.0.1536.832@0.0.1536.832" timestamp="1596744222752" />
+    <state width="1537" height="255" key="GridCell.Tab.0.left" timestamp="1596744222752">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
-    <state width="1537" height="230" key="GridCell.Tab.0.left/0.0.1536.832@0.0.1536.832" timestamp="1596555454732" />
-    <state width="1537" height="230" key="GridCell.Tab.0.right" timestamp="1596555454733">
+    <state width="1537" height="255" key="GridCell.Tab.0.left/0.0.1536.832@0.0.1536.832" timestamp="1596744222752" />
+    <state width="1537" height="255" key="GridCell.Tab.0.right" timestamp="1596744222752">
       <screen x="0" y="0" width="1536" height="832" />
     </state>
-    <state width="1537" height="230" key="GridCell.Tab.0.right/0.0.1536.832@0.0.1536.832" timestamp="1596555454733" />
+    <state width="1537" height="255" key="GridCell.Tab.0.right/0.0.1536.832@0.0.1536.832" timestamp="1596744222752" />
     <state x="277" y="0" key="SettingsEditor" timestamp="1596554607448">
       <screen x="0" y="0" width="1536" height="832" />
     </state>

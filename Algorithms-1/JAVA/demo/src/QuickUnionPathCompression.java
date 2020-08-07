@@ -1,11 +1,11 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-public class QuickUnion {
+public class QuickUnionPathCompression {
     private int[] id;
 
     //initialize
-    public QuickUnion(int n) {
+    public QuickUnionPathCompression(int n) {
         id = new int[n];
 
         for (int i = 0; i < n; i++) {
@@ -15,6 +15,7 @@ public class QuickUnion {
 
     public int root(int i) {
         while (i != id[i]) {
+            id[i] = id[id[i]];
             i = id[i];
         }
         return i;
@@ -47,7 +48,7 @@ public class QuickUnion {
 
     public static void main(String[] arg) {
         int n = StdIn.readInt();
-        QuickUnion obj1 = new QuickUnion(n);
+        QuickUnionPathCompression obj1 = new QuickUnionPathCompression(n);
         int k = n;
         while (k != 0) {
             k--;

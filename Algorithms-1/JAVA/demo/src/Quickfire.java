@@ -45,17 +45,19 @@ public class Quickfire {
     public static void main(String[] arg) {
         int n = StdIn.readInt();
         Quickfire obj1 = new Quickfire(n);
-        while (!StdIn.isEmpty()) {
+        int k = n;
+        while (k != 0) {
+            k--;
             int p = StdIn.readInt();
             int q = StdIn.readInt();
             if (obj1.find(p) == obj1.find(q)) continue;
             obj1.union(p, q);
-            StdOut.print(p + " " + q);
+            StdOut.print(p + " " + q + "\n");
+            for (int i = 0; i < n; i++) {
+                System.out.print(obj1.id[i] + " ");
+            }
         }
-
-        for (int i = 0; i < n; i++) {
-            System.out.print(obj1.id[i]);
-        }
+        k--;
     }
 }
 
